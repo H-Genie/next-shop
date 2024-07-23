@@ -1,13 +1,18 @@
 import Head from "next/head"
 import Title from "../components/Title"
+import { getProducts } from "../lib/products"
 
-const products = [
-  { id: 1, title: "First Product" },
-  { id: 2, title: "Second Product" }
-]
+export const getStaticProps = async () => {
+  console.log("[HomePage] getStaticProps()")
+  const products = await getProducts()
+  return {
+    props: { products },
+    revalidate: 60 * 5
+  }
+}
 
-export default function HomePage() {
-  console.log("🚀 ~ products:", products)
+export default function HomePage({ products }) {
+  console.log("[HomePae] render", products)
   return (
     <>
       <Head>
