@@ -15,8 +15,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params: { id } }) => {
   const product = await getProduct(id)
   return {
-    props: { product },
-    revalidate: 30
+    props: { product }
   }
 }
 

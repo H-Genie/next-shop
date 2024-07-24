@@ -7,9 +7,7 @@ export const getStaticProps = async () => {
   console.log("[HomePage] getStaticProps()")
   const products = await getProducts()
   return {
-    props: { products },
-    // revalidate: 60 * 5
-    revalidate: 30
+    props: { products }
   }
 }
 
