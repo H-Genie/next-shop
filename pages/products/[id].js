@@ -15,11 +15,13 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params: { id } }) => {
   const product = await getProduct(id)
   return {
-    props: { product }
+    props: { product },
+    revalidate: 30
   }
 }
 
 export default function ProductPage({ product }) {
+  console.log("🚀 ~ ProductPage ~ product:", product)
   return (
     <>
       <Head>

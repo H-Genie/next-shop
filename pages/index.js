@@ -8,7 +8,8 @@ export const getStaticProps = async () => {
   const products = await getProducts()
   return {
     props: { products },
-    revalidate: 60 * 5
+    // revalidate: 60 * 5
+    revalidate: 30
   }
 }
 
