@@ -13,9 +13,13 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params: { id } }) => {
-  const product = await getProduct(id)
-  return {
-    props: { product }
+  try {
+    const product = await getProduct(id)
+    return {
+      props: { product }
+    }
+  } catch (err) {
+    return { notFound: true }
   }
 }
 
