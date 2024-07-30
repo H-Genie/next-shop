@@ -17,7 +17,8 @@ export const getStaticProps = async ({ params: { id } }) => {
   try {
     const product = await getProduct(id)
     return {
-      props: { product }
+      props: { product },
+      revalidate: parseInt(process.env.REVALIDATE_SECONDS)
     }
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) {

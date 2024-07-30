@@ -7,7 +7,8 @@ export const getStaticProps = async () => {
   console.log("[HomePage] getStaticProps()")
   const products = await getProducts()
   return {
-    props: { products }
+    props: { products },
+    revalidate: parseInt(process.env.REVALIDATE_SECONDS)
   }
 }
 
