@@ -1,6 +1,7 @@
 import Head from "next/head"
 import Title from "../../components/Title"
 import { getProduct, getProducts } from "../../lib/products"
+import { ApiError } from "../../lib/api"
 
 export const getStaticPaths = async () => {
   const products = await getProducts()
@@ -19,7 +20,10 @@ export const getStaticProps = async ({ params: { id } }) => {
       props: { product }
     }
   } catch (err) {
-    return { notFound: true }
+    if (err instanceof ApiError && err.status === 404) {
+      return { notFound: true }
+    }
+    throw err
   }
 }
 
