@@ -22,7 +22,7 @@ export default function HomePage({ products }) {
       </Head>
       <main className="px-6 py-4">
         <Title children={"Next Shop"} />
-        <ul>
+        <ul className="grid grid-cols-1 lg:grid-cols-3">
           {products.map(product => (
             <li key={product.id}>
               <ProductCard product={product} />
