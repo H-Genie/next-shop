@@ -15,14 +15,15 @@ export default function HomePage({ products }) {
   console.log("[HomePae] render", products)
   return (
     <>
-      <Page title={"Indoor Plants"} />
-      <ul className="grid grid-cols-1 lg:grid-cols-3">
-        {products.map(product => (
-          <li key={product.id}>
-            <ProductCard product={product} />
-          </li>
-        ))}
-      </ul>
+      <Page title={"Indoor Plants"}>
+        <ul className="grid grid-cols-1 lg:grid-cols-3">
+          {products.map(product => (
+            <li key={product.id}>
+              <ProductCard product={product} />
+            </li>
+          ))}
+        </ul>
+      </Page>
     </>
   )
 }

@@ -34,16 +34,17 @@ export default function ProductPage({ product }) {
   console.log("🚀 ~ ProductPage ~ product:", product)
   return (
     <>
-      <Page title={product.title} />
-      <div className="flex flex-col lg:flex-row">
-        <div>
-          <Image src={product.pictureUrl} alt="" width={640} height={480} />
+      <Page title={product.title}>
+        <div className="flex flex-col lg:flex-row">
+          <div>
+            <Image src={product.pictureUrl} alt="" width={640} height={480} />
+          </div>
+          <div className="flex-1 lg:ml-4">
+            <p className="text-sm">{product.description}</p>
+            <p className="text-lg font-bold mt-2">{product.price}</p>
+          </div>
         </div>
-        <div className="flex-1 lg:ml-4">
-          <p className="text-sm">{product.description}</p>
-          <p className="text-lg font-bold mt-2">{product.price}</p>
-        </div>
-      </div>
+      </Page>
     </>
   )
 }

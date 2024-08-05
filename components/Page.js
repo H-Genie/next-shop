@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Title from "./Title"
 
-export default function Page({ title, childern }) {
+export default function Page({ title, children }) {
   return (
     <>
       <Head>
@@ -9,7 +9,7 @@ export default function Page({ title, childern }) {
       </Head>
       <main className="px-6 py-4">
         <Title>{title}</Title>
-        {childern}
+        {children}
       </main>
     </>
   )
