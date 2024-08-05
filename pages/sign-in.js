@@ -1,17 +1,36 @@
+import { useState } from "react"
 import Button from "../components/Button"
 import Field from "../components/Field"
 import Input from "../components/Input"
 import Page from "../components/Page"
 
 export default function SigninPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    console.log("should submit:", { email, password })
+  }
+
   return (
-    <Page title="Sign In">
-      <form>
+    <Page title={"Sign in"}>
+      <form onSubmit={handleSubmit}>
         <Field label={"Email"}>
-          <Input type={"email"} />
+          <Input
+            type={"email"}
+            value={email}
+            required
+            onChange={e => setEmail(e.target.value)}
+          />
         </Field>
         <Field label={"Password"}>
-          <Input type={"password"} />
+          <Input
+            type={"password"}
+            value={password}
+            required
+            onChange={e => setPassword(e.target.value)}
+          />
         </Field>
         <Button type="submit">Sign In</Button>
       </form>
