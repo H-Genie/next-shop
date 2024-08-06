@@ -5,18 +5,30 @@ import Input from "../components/Input"
 import Page from "../components/Page"
 import { fetchJson } from "../lib/api"
 
+// const sleep = ms => {
+//   return new Promise(resolve => setTimeout(resolve, ms))
+// }
+
 export default function SigninPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [status, setStatus] = useState({ loading: false, error: false })
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const response = await fetchJson("http://localhost:4000/auth/local", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier: email, password })
-    })
-    console.log("sign in:", response)
+    setStatus({ loading: true, error: false })
+    // await sleep(2000)
+    try {
+      const response = await fetchJson("http://localhost:4000/auth/local", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: email, password })
+      })
+      setStatus({ loading: false, error: false })
+      console.log("sign in:", response)
+    } catch (err) {
+      setStatus({ loading: false, error: true })
+    }
   }
 
   return (
@@ -38,7 +50,12 @@ export default function SigninPage() {
             onChange={e => setPassword(e.target.value)}
           />
         </Field>
-        <Button type="submit">Sign In</Button>
+        {status.error && <p className="text-red-700">Invalid credential</p>}
+        {status.loading ? (
+          <p>Loading...</p>
+        ) : (
+          <Button type="submit">Sign In</Button>
+        )}
       </form>
     </Page>
   )
