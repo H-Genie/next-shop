@@ -19,10 +19,10 @@ export default function SigninPage() {
     setStatus({ loading: true, error: false })
     // await sleep(2000)
     try {
-      const response = await fetchJson("http://localhost:4000/auth/local", {
+      const response = await fetchJson("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: email, password })
+        body: JSON.stringify({ email, password })
       })
       setStatus({ loading: false, error: false })
       console.log("sign in:", response)
