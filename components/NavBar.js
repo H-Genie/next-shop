@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { fetchJson } from "../lib/api"
+import { useQuery } from "@tanstack/react-query"
 
 export default function NavBar() {
-  const [user, setUser] = useState()
+  const query = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      try {
+        return await fetchJson("/api/user")
+      } catch (err) {
+        return undefined
+      }
+    },
+    staleTime: 30_000,
+    gcTime: Infinity // deprecated cacheTime
+  })
+  const user = query.data
 
   const handleSignOut = async () => {
     await fetchJson("/api/logout")
-    setUser(undefined)
+    // setUser(undefined)
   }
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const user = await fetchJson("/api/user")
-        setUser(user)
-      } catch (err) {
-        // not signed in
-      }
-    })()
-  }, [])
 
   console.log("[NavBar] user", user)
 
