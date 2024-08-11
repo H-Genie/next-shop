@@ -5,6 +5,11 @@ import { fetchJson } from "../lib/api"
 export default function NavBar() {
   const [user, setUser] = useState()
 
+  const handleSignOut = async () => {
+    await fetchJson("/api/logout")
+    setUser(undefined)
+  }
+
   useEffect(() => {
     ;(async () => {
       try {
@@ -29,7 +34,7 @@ export default function NavBar() {
           <>
             <li>{user.name}</li>
             <li>
-              <button>Sign Out</button>
+              <button onClick={handleSignOut}>Sign Out</button>
             </li>
           </>
         ) : (
