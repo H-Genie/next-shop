@@ -1,7 +1,22 @@
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { fetchJson } from "../lib/api"
 
 export default function NavBar() {
-  const user = { name: "Alice" }
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const user = await fetchJson("/api/user")
+        setUser(user)
+      } catch (err) {
+        // not signed in
+      }
+    })()
+  }, [])
+
+  console.log("[NavBar] user", user)
 
   return (
     <nav className="px-2 py-1 text-sm">

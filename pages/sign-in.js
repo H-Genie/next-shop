@@ -4,12 +4,15 @@ import Field from "../components/Field"
 import Input from "../components/Input"
 import Page from "../components/Page"
 import { fetchJson } from "../lib/api"
+import { useRouter } from "next/router"
 
 // const sleep = ms => {
 //   return new Promise(resolve => setTimeout(resolve, ms))
 // }
 
 export default function SigninPage() {
+  const router = useRouter()
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [status, setStatus] = useState({ loading: false, error: false })
@@ -26,6 +29,7 @@ export default function SigninPage() {
       })
       setStatus({ loading: false, error: false })
       console.log("sign in:", response)
+      router.push("/")
     } catch (err) {
       setStatus({ loading: false, error: true })
     }
