@@ -1,21 +1,9 @@
 import Link from "next/link"
 import { fetchJson } from "../lib/api"
-import { useQuery } from "@tanstack/react-query"
+import useUser from "../hooks/user"
 
 export default function NavBar() {
-  const query = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      try {
-        return await fetchJson("/api/user")
-      } catch (err) {
-        return undefined
-      }
-    },
-    staleTime: 30_000,
-    gcTime: Infinity // deprecated cacheTime
-  })
-  const user = query.data
+  const user = useUser()
 
   const handleSignOut = async () => {
     await fetchJson("/api/logout")
