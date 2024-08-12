@@ -5,13 +5,15 @@ import Input from "../components/Input"
 import Page from "../components/Page"
 import { fetchJson } from "../lib/api"
 import { useRouter } from "next/router"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export default function SigninPage() {
   const router = useRouter()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -27,6 +29,8 @@ export default function SigninPage() {
     e.preventDefault()
     try {
       const user = await mutation.mutateAsync()
+      queryClient.setQueryData("user", user)
+
       console.log("sign in:", user)
       router.push("/")
     } catch (err) {
