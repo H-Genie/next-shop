@@ -5,33 +5,32 @@ import Input from "../components/Input"
 import Page from "../components/Page"
 import { fetchJson } from "../lib/api"
 import { useRouter } from "next/router"
-
-// const sleep = ms => {
-//   return new Promise(resolve => setTimeout(resolve, ms))
-// }
+import { useMutation } from "@tanstack/react-query"
 
 export default function SigninPage() {
   const router = useRouter()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [status, setStatus] = useState({ loading: false, error: false })
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    setStatus({ loading: true, error: false })
-    // await sleep(2000)
-    try {
-      const response = await fetchJson("/api/login", {
+  const mutation = useMutation({
+    mutationFn: () => {
+      return fetchJson("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       })
-      setStatus({ loading: false, error: false })
-      console.log("sign in:", response)
+    }
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const user = await mutation.mutateAsync()
+      console.log("sign in:", user)
       router.push("/")
     } catch (err) {
-      setStatus({ loading: false, error: true })
+      // mutation.isError will be true
     }
   }
 
@@ -54,8 +53,8 @@ export default function SigninPage() {
             onChange={e => setPassword(e.target.value)}
           />
         </Field>
-        {status.error && <p className="text-red-700">Invalid credential</p>}
-        {status.loading ? (
+        {mutation.isError && <p className="text-red-700">Invalid credential</p>}
+        {mutation.isPending ? (
           <p>Loading...</p>
         ) : (
           <Button type="submit">Sign In</Button>
