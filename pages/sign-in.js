@@ -3,9 +3,8 @@ import Button from "../components/Button"
 import Field from "../components/Field"
 import Input from "../components/Input"
 import Page from "../components/Page"
-import { fetchJson } from "../lib/api"
 import { useRouter } from "next/router"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useSignIn } from "../hooks/user"
 
 export default function SigninPage() {
   const router = useRouter()
@@ -13,29 +12,12 @@ export default function SigninPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation({
-    mutationFn: () => {
-      return fetchJson("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      })
-    }
-  })
+  const { signIn, signInError, signInPending } = useSignIn()
 
   const handleSubmit = async e => {
     e.preventDefault()
-    try {
-      const user = await mutation.mutateAsync()
-      queryClient.setQueryData("user", user)
-
-      console.log("sign in:", user)
-      router.push("/")
-    } catch (err) {
-      // mutation.isError will be true
-    }
+    const valid = await signIn(email, password)
+    if (valid) router.push("/")
   }
 
   return (
@@ -57,8 +39,8 @@ export default function SigninPage() {
             onChange={e => setPassword(e.target.value)}
           />
         </Field>
-        {mutation.isError && <p className="text-red-700">Invalid credential</p>}
-        {mutation.isPending ? (
+        {signInError && <p className="text-red-700">Invalid credential</p>}
+        {signInPending ? (
           <p>Loading...</p>
         ) : (
           <Button type="submit">Sign In</Button>

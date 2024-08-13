@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { fetchJson } from "../lib/api"
-import useUser from "../hooks/user"
+import { useUser } from "../hooks/user"
 
 export default function NavBar() {
   const user = useUser()
