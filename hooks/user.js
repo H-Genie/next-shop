@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fetchJson } from "../lib/api"
 
+const USER_QUERY_KEY = "user"
+
 export const useSignIn = () => {
   const queryClient = useQueryClient()
 
@@ -13,11 +15,12 @@ export const useSignIn = () => {
       })
     }
   })
+
   return {
     signIn: async (email, password) => {
       try {
         const user = await mutation.mutateAsync({ email, password })
-        queryClient.setQueryData("user", user)
+        queryClient.setQueryData([USER_QUERY_KEY], user)
         return true
       } catch (err) {
         return false
@@ -28,9 +31,22 @@ export const useSignIn = () => {
   }
 }
 
+export const userSignOut = () => {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: () => fetchJson("/api/logout")
+  })
+
+  return async () => {
+    await mutation.mutateAsync()
+    queryClient.setQueryData([USER_QUERY_KEY], null)
+  }
+}
+
 export const useUser = () => {
   const query = useQuery({
-    queryKey: ["user"],
+    queryKey: [USER_QUERY_KEY],
     queryFn: async () => {
       try {
         return await fetchJson("/api/user")
