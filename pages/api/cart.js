@@ -15,7 +15,7 @@ const stripCartItem = cartItem => {
 }
 
 const handleCart = async (req, res) => {
-  const { jwt } = req.cookie
+  const { jwt } = req.cookies
   if (!jwt) {
     res.status(401).end()
     return
