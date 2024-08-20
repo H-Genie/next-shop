@@ -1,11 +1,24 @@
 import { useState } from "react"
 import Button from "./Button"
+import { useRouter } from "next/router"
+import { useMutation } from "@tanstack/react-query"
+import { fetchJson } from "../lib/api"
 
 export default function AddToCartWidget({ productId }) {
+  const router = useRouter()
   const [quantity, setQuantity] = useState(1)
+  const mutation = useMutation({
+    mutationFn: () =>
+      fetchJson("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, quantity })
+      })
+  })
 
   const handleClick = async () => {
-    console.log("Should add to cart:", { productId, quantity })
+    await mutation.mutateAsync()
+    router.push("/cart")
   }
 
   return (
@@ -17,7 +30,11 @@ export default function AddToCartWidget({ productId }) {
         value={quantity.toString()}
         onChange={e => setQuantity(parseInt(e.target.value))}
       />
-      <Button onClick={handleClick}>Add to Cart</Button>
+      {mutation.isPending ? (
+        <p>Loading...</p>
+      ) : (
+        <Button onClick={handleClick}>Add to Cart</Button>
+      )}
     </div>
   )
 }
